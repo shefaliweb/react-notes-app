@@ -1,0 +1,130 @@
+.container {
+  max-width: 960px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 0;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-color-light);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 1.5em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.search input {
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  font-size: 1rem;
+  color: var(--text-color-light);
+}
+
+.search input:focus {
+  outline: none;
+}
+
+.notes-list {
+  display: grid;
+  grid-gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.note {
+  background-color: var(--card-color-light);
+  border-radius: 10px;
+  padding: 1.5rem;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.note:hover {
+  transform: translateY(-5px);
+}
+
+.note-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.delete-icon {
+  cursor: pointer;
+  color: #ef4444;
+  transition: color 0.2s ease-in-out;
+}
+
+.delete-icon:hover {
+  color: #dc2626;
+}
+
+.note.new {
+  background-color: var(--card-color-light);
+}
+
+.note.new textarea {
+  border: none;
+  resize: none;
+  background-color: transparent;
+  font-size: 1rem;
+  color: var(--text-color-light);
+  height: 100%;
+}
+
+.note.new textarea:focus {
+  outline: none;
+}
+
+.save {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.save:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* Dark Mode Styles */
+
+.dark-mode .search {
+    box-shadow: 0 1px 3px rgba(255,255,255,0.1);
+}
+
+.dark-mode .note {
+    box-shadow: 0 4px 6px rgba(255,255,255,0.1);
+}
+
+.dark-mode .note-footer {
+    color: #9ca3af;
+}
