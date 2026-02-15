@@ -1,61 +1,380 @@
-:root {
-  --background-color-light: #f9f9f9;
-  --background-color-dark: #121212;
-  --card-color-light: #ffffff;
-  --card-color-dark: #1e1e1e;
-  --text-color-light: #222222;
-  --text-color-dark: #f1f1f1;
-  --primary-color: #4f46e5;
-  --primary-color-hover: #4338ca;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased min-h-full;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply min-h-full text-gray-900 dark:text-gray-100 transition-colors duration-300;
+    background: transparent !important; /* let animated bg show through */
+  }
+  .dark body {
+    background: transparent !important;
+  }
+  #root {
+    min-height: 100%;
+    background: transparent !important;
+  }
 }
 
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-color-light);
-  color: var(--text-color-light);
-  transition: background-color 0.3s ease, color 0.3s ease;
+@layer utilities {
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+  }
 }
 
-.dark-mode {
-  background-color: var(--background-color-dark);
-  color: var(--text-color-dark);
+/* App shell - transparent so animated background is visible */
+.app-shell {
+  min-height: 100vh;
+  background: transparent !important;
+  position: relative;
 }
 
-.dark-mode .note {
-  background-color: var(--card-color-dark);
-  color: var(--text-color-dark);
+/* Animated background - fixed, behind content, positive z so it paints */
+.animated-bg-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+.app-content {
+  position: relative;
+  z-index: 1;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem 1.5rem;
+  min-height: 100vh;
+}
+@media (min-width: 640px) {
+  .app-content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
-.dark-mode .search {
-  background-color: var(--card-color-dark);
+/* Auth pages - same glass card look as notes */
+.auth-card {
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.dark .auth-card {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+.auth-card-inner {
+  padding: 2rem;
 }
 
-.dark-mode .search input {
-  background-color: var(--card-color-dark);
-  color: var(--text-color-dark);
+.animated-bg-base {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #e0e7ff 0%, #f5f3ff 35%, #ede9fe 70%, #e0e7ff 100%);
+}
+.dark .animated-bg-base {
+  background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 35%, #312e81 70%, #0f172a 100%);
 }
 
-.dark-mode .new {
-    background-color: var(--card-color-dark);
+/* Animated mesh gradient overlay */
+.animated-bg-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+  animation: mesh-pulse 12s ease-in-out infinite;
+}
+.dark .animated-bg-mesh {
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 80%, rgba(34, 211, 238, 0.12) 0%, transparent 50%);
+}
+@keyframes mesh-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
 }
 
-.dark-mode .new textarea {
-    background-color: var(--card-color-dark);
-    color: var(--text-color-dark);
+/* Soft orbs - CSS animated */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+.orb-1 {
+  top: -10rem;
+  left: -10rem;
+  width: 500px;
+  height: 500px;
+  background: rgba(99, 102, 241, 0.3);
+  filter: blur(100px);
+  animation: orb-float-1 25s ease-in-out infinite;
+}
+.dark .orb-1 {
+  background: rgba(99, 102, 241, 0.2);
+}
+.orb-2 {
+  bottom: -10rem;
+  right: -10rem;
+  width: 550px;
+  height: 550px;
+  background: rgba(139, 92, 246, 0.28);
+  filter: blur(100px);
+  animation: orb-float-2 28s ease-in-out infinite;
+}
+.dark .orb-2 {
+  background: rgba(139, 92, 246, 0.18);
+}
+.orb-3 {
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  margin-left: -200px;
+  margin-top: -200px;
+  background: rgba(34, 211, 238, 0.25);
+  filter: blur(80px);
+  animation: orb-float-3 20s ease-in-out infinite;
+}
+.dark .orb-3 {
+  background: rgba(34, 211, 238, 0.12);
+}
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  33% { transform: translate(60px, -80px) scale(1.15); opacity: 1; }
+  66% { transform: translate(-40px, 40px) scale(0.95); opacity: 0.8; }
+}
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  33% { transform: translate(-80px, 50px) scale(1.1); opacity: 1; }
+  66% { transform: translate(50px, -60px) scale(0.9); opacity: 0.8; }
+}
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(calc(-50% + 40px), calc(-50% - 30px)) scale(1.2); opacity: 0.9; }
 }
 
-.dark-mode .header {
-    color: var(--text-color-dark);
+.animated-bg-bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
 }
 
-.dark-mode .save {
-    background-color: var(--primary-color);
-    color: var(--text-color-dark);
+/* Flowing bubbles - rise and drift with CSS */
+.bubble {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  left: var(--left);
+  top: var(--top);
+  border-radius: 50%;
+  pointer-events: none;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.5) 35%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    inset -10px -10px 30px rgba(255, 255, 255, 0.5),
+    inset 6px 6px 20px rgba(255, 255, 255, 0.25),
+    0 0 80px rgba(255, 255, 255, 0.3),
+    0 25px 50px rgba(99, 102, 241, 0.15);
+  will-change: transform, opacity;
+}
+.dark .bubble {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.15) 35%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow:
+    inset -8px -8px 25px rgba(255, 255, 255, 0.15),
+    0 0 60px rgba(255, 255, 255, 0.12),
+    0 25px 50px rgba(0, 0, 0, 0.25);
 }
 
-.dark-mode .save:hover {
-    background-color: var(--primary-color-hover);
+.bubble-float {
+  animation: bubble-float var(--duration) ease-in-out var(--delay) infinite;
+}
+.bubble-rise {
+  animation: bubble-rise var(--duration) ease-in-out var(--delay) infinite;
+}
+.bubble-drift {
+  animation: bubble-drift var(--duration) ease-in-out var(--delay) infinite;
+}
+
+@keyframes bubble-float {
+  0% {
+    transform: translate(0, 0) scale(0.85);
+    opacity: 0.4;
+  }
+  15% {
+    transform: translate(15px, -15vh) scale(1.05);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-20px, -55vh) scale(0.95);
+    opacity: 0.6;
+  }
+  85% {
+    transform: translate(10px, -95vh) scale(1.02);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate(0, -120vh) scale(0.9);
+    opacity: 0.2;
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.35;
+  }
+  20% {
+    transform: translate(-25px, -20vh) scale(1.08);
+    opacity: 0.8;
+  }
+  60% {
+    transform: translate(18px, -70vh) scale(0.98);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-10px, -115vh) scale(1);
+    opacity: 0.15;
+  }
+}
+
+@keyframes bubble-drift {
+  0% {
+    transform: translate(0, 0) scale(0.88);
+    opacity: 0.45;
+  }
+  25% {
+    transform: translate(30px, -25vh) scale(1.06);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-15px, -60vh) scale(0.92);
+    opacity: 0.55;
+  }
+  75% {
+    transform: translate(20px, -90vh) scale(1.03);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-5px, -118vh) scale(0.95);
+    opacity: 0.2;
+  }
+}
+.aurora-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.animated-bg-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark .animated-bg-noise {
+  opacity: 0.04;
+}
+
+/* Aurora / mesh gradient animation for background */
+@keyframes aurora-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.8;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+}
+
+.aurora-bg {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.12) 0%,
+    rgba(139, 92, 246, 0.08) 25%,
+    rgba(236, 72, 153, 0.06) 50%,
+    rgba(34, 211, 238, 0.1) 75%,
+    rgba(99, 102, 241, 0.12) 100%
+  );
+  background-size: 400% 400%;
+  animation: aurora-shift 18s ease infinite;
+}
+
+.dark .aurora-bg {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.1) 25%,
+    rgba(236, 72, 153, 0.08) 50%,
+    rgba(34, 211, 238, 0.12) 75%,
+    rgba(99, 102, 241, 0.15) 100%
+  );
+  background-size: 400% 400%;
+}
+
+/* Glass bubble style */
+.bubble-glass {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 8px 8px 20px rgba(255, 255, 255, 0.35),
+    inset -6px -6px 16px rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(99, 102, 241, 0.08);
+  backdrop-filter: blur(2px);
+}
+
+.dark .bubble-glass {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 6px 6px 14px rgba(255, 255, 255, 0.08),
+    inset -4px -4px 12px rgba(0, 0, 0, 0.2),
+    0 8px 32px rgba(0, 0, 0, 0.15);
 }
